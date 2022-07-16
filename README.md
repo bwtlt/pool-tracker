@@ -1,6 +1,6 @@
-# Getting Started with Create React App
+# Pool Tracker
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Track your pool's health (pH, chlorine, temperature, etc.)
 
 ## Available Scripts
 
