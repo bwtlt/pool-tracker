@@ -1,31 +1,65 @@
 import React, { useState } from 'react';
+import { Button } from 'react-bootstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faClose, faHistory, faEdit, faCheck } from '@fortawesome/free-solid-svg-icons';
+import History from './history';
 
 function Item(props) {
     const [edit, setEdit] = useState(false);
     const [input, setInput] = useState('');
     const [value, setValue] = useState(props.value);
+    const [showHistory, setShowHistory] = useState(false);
 
-    return (
-        <div className="item">
-            <h2 className="item-name">{props.name}</h2>
+    const historyValues = History[props.name];
+
+    const historyComponent =
+        <div className="history">
+            <div className="history-header">
+                <span></span>
+                <h3>Historique</h3>
+                <Button onClick={() => { setShowHistory(false); }}><FontAwesomeIcon className="button-icon" icon={faClose} /></Button>
+            </div>
+            <div>
+                {historyValues && historyValues.map((i) => (
+                    <li key={i.date}>
+                        {i.date} - <span className="history-value">{i.value}</span>
+                    </li>
+                ))}
+            </div>
+        </div>;
+
+    const display = showHistory ? historyComponent :
+        <>
             <div className="value-container">
                 <span className="value">{value}</span>
                 <span className="unit"> {props.unit}</span>
             </div>
             <div className="value-date">{props.date}</div>
-            {!edit && <button className="measure-button" onClick={() => {
-                setEdit(true);
-            }}>Mesure</button>}
-            {edit && <form className="edit-container">
-                <input className="value-input" id={props.name} value={input} onInput={e => setInput(e.target.value)}/>
-                <button onClick={() => {
-                    setEdit(false);
-                    setValue(input);
-                }}>Ok</button>
-                <button onClick={() => {
-                    setEdit(false);
-                }}>Annuler</button>
-            </form>}
+            <div className="controls">
+                {!edit && <Button onClick={() => {
+                    setEdit(true);
+                }}><FontAwesomeIcon className="button-icon" icon={faEdit} /></Button>}
+                {!edit && <Button onClick={() => {
+                    setShowHistory(true);
+                }}><FontAwesomeIcon className="button-icon" icon={faHistory} /></Button>}
+                {edit && 
+                <>
+                    <input className="value-input" id={props.name} value={input} onInput={e => setInput(e.target.value)} />
+                    <Button onClick={() => {
+                        setEdit(false);
+                        setValue(input);
+                    }}><FontAwesomeIcon className="button-icon" icon={faCheck}/></Button>
+                    <Button onClick={() => {
+                        setEdit(false);
+                    }}><FontAwesomeIcon className="button-icon" icon={faClose}/></Button>
+                </>}
+            </div>
+        </>;
+
+    return (
+        <div className="item">
+            <h2 className="item-name">{props.name}</h2>
+            {display}
         </div>);
 }
 
