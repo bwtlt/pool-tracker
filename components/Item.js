@@ -12,11 +12,7 @@ function Item(props) {
 
     const historyValues = props.history;
 
-    const handleSubmit = async (name, value) => {
-        const data = {
-            name,
-            value,
-        }
+    const handleSubmit = async (data) => {
         const JSONdata = JSON.stringify(data)
 
         // Send the form data to our API and get a response.
@@ -75,10 +71,15 @@ function Item(props) {
                             onInput={e => setInput(e.target.value)}
                         />
                         <Button variant="outline-secondary" onClick={() => {
+                            const data = {
+                                name: props.name,
+                                date: new Date(Date.now()).toLocaleString(),
+                                value: input,
+                            };
                             setEdit(false);
-                            setValue(input);
-                            setDate(new Date(Date.now()).toLocaleString());
-                            handleSubmit(props.name, input);
+                            setValue(data.value);
+                            setDate(data.date);
+                            handleSubmit(data);
                         }}><FontAwesomeIcon className="button-icon" icon={faCheck} /></Button>
                         <Button variant="outline-secondary" onClick={() => {
                             setEdit(false);

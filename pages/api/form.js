@@ -1,14 +1,6 @@
 import { getAuthToken } from '../../googleapi/getAuthToken';
 
-/**
- * Updates values in a Spreadsheet.
- * @param {string} spreadsheetId The spreadsheet ID.
- * @param {string} range The range of values to update.
- * @param {object} valueInputOption Value update options.
- * @param {(string[])[]} _values A 2d array of values to update.
- * @return {obj} spreadsheet information
- */
-async function updateValues(name, value) {
+async function updateValues(data) {
     const { GoogleAuth } = require('google-auth-library');
     const { google } = require('googleapis');
 
@@ -16,22 +8,21 @@ async function updateValues(name, value) {
 
     const sheets = google.sheets({ version: 'v4', auth });
     const resource = {
-        "range": name,
+        "range": data.name,
         "majorDimension": "ROWS",
         "values": [
-            [new Date(Date.now()).toLocaleString(), value],
+            [data.date, data.value],
         ],
     };
     try {
         const result = await sheets.spreadsheets.values.append({
             spreadsheetId: process.env.SHEET_ID,
-            range: name,
+            range: data.name,
             valueInputOption: 'RAW',
             resource,
         });
         return result;
     } catch (err) {
-        // TODO (Developer) - Handle exception
         throw err;
     }
 }
@@ -40,13 +31,10 @@ export default async function handler(req, res) {
     const body = req.body
     console.log('body: ', body)
 
-    // Both of these are required.
-    if (!body.name || !body.value) {
-        return res.json({ data: 'name or value not found' })
+    if (!body.date || !body.name || !body.value) {
+        return res.json({ data: 'missing field' })
     }
 
-    // Found the name.
-    //res.json({ data: `${body.first} ${body.last}` })
-    let result = await updateValues(body.name, body.value);
-    res.json({ data: `${body.name} ${body.value}` })
+    let result = await updateValues(body);
+    res.json({ data: `${body.date} ${body.name} ${body.value}` })
 }
