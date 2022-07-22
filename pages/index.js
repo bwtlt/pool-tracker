@@ -8,7 +8,7 @@ import { getAuthToken } from '../googleapi/getAuthToken';
 const CONSTANTS_NAMES = [
   { name: "pH", unit: "" },
   { name: "Chlore", unit: "ppm" },
-  { name: "Temperature", unit: "°C"},
+  { name: "Temperature", unit: "°C" },
   { name: "Chaussette", unit: "" },
   { name: "Robot", unit: "" }
 ];
@@ -43,7 +43,7 @@ function renderItems(history) {
   for (const [key, value] of Object.entries(CONSTANTS_NAMES)) {
     const values = history[value.name];
     const lastValue = values[values.length - 1];
-    items.push(<Item name={value.name} value={lastValue[1]} unit={value.unit} date={lastValue[0]} history={history[value.name]} key={value.name}/>)
+    items.push(<Item name={value.name} value={lastValue[1]} unit={value.unit} date={lastValue[0]} history={history[value.name]} key={value.name} />)
   }
   return items;
 }
@@ -66,7 +66,12 @@ export default function Home({ history }) {
         </div>
       </main>
 
-      <footer className={styles.footer}><a href="https://docs.google.com/spreadsheets/d/1rSOukLsKhWbSnEZ2A8HBd-aYVikfa2rVaT5OpCRd7t8/edit?usp=sharing">Données</a></footer>
-    </div>
+      <footer className={styles.footer}>
+        <div>
+          <a href="https://docs.google.com/spreadsheets/d/1rSOukLsKhWbSnEZ2A8HBd-aYVikfa2rVaT5OpCRd7t8/edit?usp=sharing">Données</a>
+        </div>
+        <div className="credits">dev:<a href="https://bwatelet.fr">bwatelet.fr</a></div>
+      </footer>
+    </div >
   )
 }

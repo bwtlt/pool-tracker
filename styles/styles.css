@@ -98,3 +98,9 @@
 .history-entry {
   list-style: none;
 }
+
+.credits {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+}
