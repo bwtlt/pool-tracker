@@ -1,3 +1,5 @@
+import { getAuthToken } from '../../googleapi/getAuthToken';
+
 /**
  * Updates values in a Spreadsheet.
  * @param {string} spreadsheetId The spreadsheet ID.
@@ -10,10 +12,9 @@ async function updateValues(name, value) {
     const { GoogleAuth } = require('google-auth-library');
     const { google } = require('googleapis');
 
-    const auth = await google.auth.getClient({ scopes: ['https://www.googleapis.com/auth/spreadsheets'] });
+    const auth = await getAuthToken();
 
     const sheets = google.sheets({ version: 'v4', auth });
-    console.log(`sheet id: ${process.env.SHEET_ID}`)
     const resource = {
         "range": name,
         "majorDimension": "ROWS",
@@ -28,7 +29,6 @@ async function updateValues(name, value) {
             valueInputOption: 'RAW',
             resource,
         });
-        console.log('%d cells updated.', result.data.updatedCells);
         return result;
     } catch (err) {
         // TODO (Developer) - Handle exception

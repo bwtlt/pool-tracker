@@ -89,7 +89,7 @@ function Item(props) {
         </>;
 
     return (
-        <div className="item" key={props.name}>
+        <div className="item">
             <h2 className="item-name">{props.name}</h2>
             {display}
         </div>);

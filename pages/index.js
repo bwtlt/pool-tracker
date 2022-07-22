@@ -3,6 +3,7 @@ import Image from 'next/image'
 import styles from '../styles/Home.module.css'
 import Item from '../components/Item';
 import { google } from 'googleapis';
+import { getAuthToken } from '../googleapi/getAuthToken';
 
 const CONSTANTS_NAMES = [
   { name: "pH", unit: "" },
@@ -14,7 +15,7 @@ const CONSTANTS_NAMES = [
 
 export async function getServerSideProps() {
 
-  const auth = await google.auth.getClient({ scopes: ['https://www.googleapis.com/auth/spreadsheets.readonly'] });
+  const auth = await getAuthToken();
 
   const sheets = google.sheets({ version: 'v4', auth });
 
@@ -42,7 +43,7 @@ function renderItems(history) {
   for (const [key, value] of Object.entries(CONSTANTS_NAMES)) {
     const values = history[value.name];
     const lastValue = values[values.length - 1];
-    items.push(<Item name={value.name} value={lastValue[1]} unit={value.unit} date={lastValue[0]} history={history[value.name]} />)
+    items.push(<Item name={value.name} value={lastValue[1]} unit={value.unit} date={lastValue[0]} history={history[value.name]} key={value.name}/>)
   }
   return items;
 }
